@@ -1,0 +1,73 @@
+name: snapd-socket-avenue
+base: core18
+license: Apache-2.0
+version: '0.0.1'
+summary: Surfaces UNIX domain sockets whose snapd HTTP access is bounded
+description: |
+  Supplies different UNIX domain sockets whose level of HTTP request access to
+  the snapd REST API is bounded by various degrees of strictness
+grade: stable
+confinement: strict
+slots:
+  api-full-control:
+    interface: content
+    content: socket-directory
+    write:
+    - $SNAP_DATA/var/run/api-full-control
+  api-service-control:
+    interface: content
+    content: socket-directory
+    write:
+      - $SNAP_DATA/var/run/api-service-control
+  api-service-read:
+    interface: content
+    content: socket-directory
+    write:
+    - $SNAP_DATA/var/run/api-service-read
+apps:
+  api-full-control:
+    command: $SNAP/bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-full-control/snapd-api.socket $SNAP/accessRules/apiFullControl.txt
+    daemon: simple
+    plugs:
+    - network
+    - network-bind
+    - snapd-control
+    restart-condition: always
+    restart-delay: 10s
+  api-service-control:
+    command: $SNAP/bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-control/snapd-api.socket $SNAP/accessRules/apiServiceControl.txt
+    daemon: simple
+    plugs:
+    - network
+    - network-bind
+    - snapd-control
+    restart-condition: always
+    restart-delay: 10s
+  api-service-read:
+    command: $SNAP/bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-read/snapd-api.socket $SNAP/accessRules/apiServiceRead.txt
+    daemon: simple
+    plugs:
+    - network
+    - network-bind
+    - snapd-control
+    restart-condition: always
+    restart-delay: 10s
+parts:
+  http-access-rules-lists:
+    plugin: dump
+    source: accessRules
+  unix-socket-http-veil:
+    plugin: dump
+    source: . # Not consumed, but must be present as it is a required field.
+    organize:
+      'unix-socket-http-veil*': bin/unix-socket-http-veil
+    override-pull: |
+      if [ "$SNAPCRAFT_ARCH_TRIPLET" = "aarch64-linux-gnu" ]; then
+        curl -O https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_arm64
+      elif [ "$SNAPCRAFT_ARCH_TRIPLET" = "x86_64-linux-gnu" ]; then
+        curl -O https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_amd64
+      else
+        echo "Unsupported architecture: $SNAPCRAFT_ARCH_TRIPLET"
+        exit 1
+      fi
+      cp -r $SNAPCRAFT_PART_SRC/. $SNAPCRAFT_PART_BUILD/

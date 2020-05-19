@@ -1,0 +1,16 @@
+POST~/v2/login
+POST~/v2/logout
+GET~/v2/snaps
+POST~/v2/snaps
+GET~/v2/snaps/[name]
+POST~/v2/snaps/[name]
+GET~/v2/apps
+POST~/v2/apps
+GET~/v2/snaps/[name]/conf
+PUT~/v2/snaps/[name]/conf
+GET~/v2/interfaces
+POST~/v2/interfaces
+GET~/v2/connections
+GET~/v2/changes/[id]
+POST~/v2/changes/[id]
+GET~/v2/changes
