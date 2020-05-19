@@ -63,9 +63,9 @@ parts:
       'unix-socket-http-veil*': bin/unix-socket-http-veil
     override-pull: |
       if [ "$SNAPCRAFT_ARCH_TRIPLET" = "aarch64-linux-gnu" ]; then
-        curl -O -L https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_arm64
+        curl -O -L https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.2/unix-socket-http-veil_1.1.2_debian_arm64
       elif [ "$SNAPCRAFT_ARCH_TRIPLET" = "x86_64-linux-gnu" ]; then
-        curl -O -L https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_amd64
+        curl -O -L https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.2/unix-socket-http-veil_1.1.2_debian_amd64
       else
         echo "Unsupported architecture: $SNAPCRAFT_ARCH_TRIPLET"
         exit 1
