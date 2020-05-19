@@ -26,7 +26,7 @@ slots:
     - $SNAP_DATA/var/run/api-service-read
 apps:
   api-full-control:
-    command: $SNAP/bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-full-control/snapd-api.socket $SNAP/accessRules/apiFullControl.txt
+    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-full-control/snapd-api.socket $SNAP/accessRules/apiFullControl.txt
     daemon: simple
     plugs:
     - network
@@ -35,7 +35,7 @@ apps:
     restart-condition: always
     restart-delay: 10s
   api-service-control:
-    command: $SNAP/bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-control/snapd-api.socket $SNAP/accessRules/apiServiceControl.txt
+    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-control/snapd-api.socket $SNAP/accessRules/apiServiceControl.txt
     daemon: simple
     plugs:
     - network
@@ -44,7 +44,7 @@ apps:
     restart-condition: always
     restart-delay: 10s
   api-service-read:
-    command: $SNAP/bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-read/snapd-api.socket $SNAP/accessRules/apiServiceRead.txt
+    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-read/snapd-api.socket $SNAP/accessRules/apiServiceRead.txt
     daemon: simple
     plugs:
     - network
@@ -63,11 +63,12 @@ parts:
       'unix-socket-http-veil*': bin/unix-socket-http-veil
     override-pull: |
       if [ "$SNAPCRAFT_ARCH_TRIPLET" = "aarch64-linux-gnu" ]; then
-        curl -O https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_arm64
+        curl -O -L https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_arm64
       elif [ "$SNAPCRAFT_ARCH_TRIPLET" = "x86_64-linux-gnu" ]; then
-        curl -O https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_amd64
+        curl -O -L https://github.com/pdulapalli/unix-socket-http-veil/releases/download/v1.1.0/unix-socket-http-veil_1.1.0_debian_amd64
       else
         echo "Unsupported architecture: $SNAPCRAFT_ARCH_TRIPLET"
         exit 1
       fi
+      chmod +x unix-socket-http-veil*
       cp -r $SNAPCRAFT_PART_SRC/. $SNAPCRAFT_PART_BUILD/
