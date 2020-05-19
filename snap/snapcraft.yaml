@@ -26,7 +26,7 @@ slots:
     - $SNAP_DATA/var/run/api-service-read
 apps:
   api-full-control:
-    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-full-control/snapd-api.socket $SNAP/accessRules/apiFullControl.txt
+    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-full-control/snapd-api.socket $SNAP/rules/apiFullControl.txt
     daemon: simple
     plugs:
     - network
@@ -35,7 +35,7 @@ apps:
     restart-condition: always
     restart-delay: 10s
   api-service-control:
-    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-control/snapd-api.socket $SNAP/accessRules/apiServiceControl.txt
+    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-control/snapd-api.socket $SNAP/rules/apiServiceControl.txt
     daemon: simple
     plugs:
     - network
@@ -44,7 +44,7 @@ apps:
     restart-condition: always
     restart-delay: 10s
   api-service-read:
-    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-read/snapd-api.socket $SNAP/accessRules/apiServiceRead.txt
+    command: bin/unix-socket-http-veil /run/snapd.socket $SNAP_DATA/var/run/api-service-read/snapd-api.socket $SNAP/rules/apiServiceRead.txt
     daemon: simple
     plugs:
     - network
@@ -55,7 +55,7 @@ apps:
 parts:
   http-access-rules-lists:
     plugin: dump
-    source: accessRules
+    source: access
   unix-socket-http-veil:
     plugin: dump
     source: . # Not consumed, but must be present as it is a required field.
