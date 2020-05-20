@@ -1,0 +1,33 @@
+name: sample-consumer
+base: core18
+version: '0.0.1'
+summary: A sample consumer of shared UNIX domain sockets
+description: |
+  A sample consumer of shared UNIX domain sockets
+grade: stable
+confinement: strict
+plugs:
+  ipc-sockets:
+    interface: content
+    content: socket-directory
+    target: $SNAP/var/run/ipc-sockets
+apps:
+  nihao:
+    command: bin/wait.sh
+    daemon: simple
+    restart-condition: always
+    restart-delay: 10s
+    plugs:
+      - network
+      - network-bind
+      - ipc-sockets
+parts:
+  sample:
+    plugin: dump
+    source: scripts
+  needed-packages:
+    plugin: nil
+    stage-packages:
+      - curl
+    build-packages:
+      - build-essential
